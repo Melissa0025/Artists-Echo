@@ -13,11 +13,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.artgallery.Model.User;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.example.artgallery.Model.Post;
-
 
 import java.util.Objects;
 
@@ -31,6 +31,36 @@ public class CreateActivity extends AppCompatActivity {
     private FirebaseFirestore firestoreDb;
     private StorageReference storageReference;
 
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_create);
+//
+//        storageReference = FirebaseStorage.getInstance().getReference();
+//        firestoreDb = FirebaseFirestore.getInstance();
+//
+//        firestoreDb.collection("users")
+//                .document(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid())
+//                .get()
+//                .addOnSuccessListener(userSnapshot -> {
+//                    signedInUser = userSnapshot.toObject(User.class);
+//                    Log.i(TAG, "Signed-in user: " + signedInUser);
+//                })
+//                .addOnFailureListener(exception -> Log.i(TAG, "Failure fetching signed-in user", exception));
+//
+//        findViewById(R.id.btnPickImage).setOnClickListener(view -> {
+//            Log.i(TAG, "Opening image picker on device");
+//            Intent imagePickerIntent = new Intent(Intent.ACTION_GET_CONTENT);
+//            imagePickerIntent.setType("image/*");
+//            if (imagePickerIntent.resolveActivity(getPackageManager()) != null) {
+//                startActivityForResult(imagePickerIntent, PICK_PHOTO_CODE);
+//            }
+//        });
+//
+//        findViewById(R.id.btnSubmit).setOnClickListener(view -> handleSubmitButtonClick());
+//    }
+
+    ////////////////////////////
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,14 +69,28 @@ public class CreateActivity extends AppCompatActivity {
         storageReference = FirebaseStorage.getInstance().getReference();
         firestoreDb = FirebaseFirestore.getInstance();
 
-        firestoreDb.collection("users")
-                .document(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid())
-                .get()
-                .addOnSuccessListener(userSnapshot -> {
-                    signedInUser = userSnapshot.toObject(User.class);
-                    Log.i(TAG, "Signed-in user: " + signedInUser);
-                })
-                .addOnFailureListener(exception -> Log.i(TAG, "Failure fetching signed-in user", exception));
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (currentUser != null) {
+            // User is signed in, proceed to fetch user data
+            firestoreDb.collection("users")
+                    .document(currentUser.getUid())
+                    .get()
+                    .addOnSuccessListener(userSnapshot -> {
+                        signedInUser = userSnapshot.toObject(User.class);
+                        Log.i(TAG, "Signed-in user: " + signedInUser);
+                    })
+                    .addOnFailureListener(exception ->
+                            Log.i(TAG, "Failure fetching signed-in user", exception)
+                    );
+        } else {
+            // No signed-in user, redirect to login
+            Log.i(TAG, "No signed-in user found. Redirecting to login.");
+            Intent loginIntent = new Intent(this, LoginActivity.class);
+            startActivity(loginIntent);
+            finish();
+            return;
+        }
 
         findViewById(R.id.btnPickImage).setOnClickListener(view -> {
             Log.i(TAG, "Opening image picker on device");
@@ -59,6 +103,7 @@ public class CreateActivity extends AppCompatActivity {
 
         findViewById(R.id.btnSubmit).setOnClickListener(view -> handleSubmitButtonClick());
     }
+//////////////////////////
 
     private void handleSubmitButtonClick() {
         if (photoUri == null) {
