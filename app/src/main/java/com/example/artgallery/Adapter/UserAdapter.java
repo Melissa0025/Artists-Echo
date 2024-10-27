@@ -14,9 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.artgallery.Fragment.ProfileFragment;
-import com.example.artgallery.R;
-
 import com.example.artgallery.Model.User;
+import com.example.artgallery.R;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
