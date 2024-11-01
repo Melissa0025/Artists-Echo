@@ -1,13 +1,12 @@
 package com.example.artgallery.Adapter;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,12 +18,19 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.artgallery.CommentsActivity;
 import com.example.artgallery.FollowersActivity;
 import com.example.artgallery.Fragment.PostDetailFragment;
 import com.example.artgallery.Fragment.ProfileFragment;
+import com.example.artgallery.Model.Post;
+import com.example.artgallery.Model.User;
+import com.example.artgallery.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,14 +40,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.example.artgallery.Model.Post;
-import com.example.artgallery.Model.User;
-import com.example.artgallery.R;
 
 import java.util.HashMap;
 import java.util.List;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ImageViewHolder> {
 
@@ -197,28 +198,29 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ImageViewHolde
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
-                        switch (menuItem.getItemId()){
-                            case R.id.edit:
-                                editPost(post.getPostid());
-                                return true;
-                            case R.id.delete:
-                                final String id = post.getPostid();
-                                FirebaseDatabase.getInstance().getReference("Posts")
-                                        .child(post.getPostid()).removeValue()
-                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if (task.isSuccessful()){
-                                                   deleteNotifications(id, firebaseUser.getUid());
-                                                }
+                        int id = menuItem.getItemId();
+
+                        if (id == R.id.edit) {
+                            editPost(post.getPostid());
+                            return true;
+                        } else if (id == R.id.delete) {
+                            final String postId = post.getPostid();
+                            FirebaseDatabase.getInstance().getReference("Posts")
+                                    .child(postId).removeValue()
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+                                                deleteNotifications(postId, firebaseUser.getUid());
                                             }
-                                        });
-                                return true;
-                            case R.id.report:
-                                Toast.makeText(mContext, "Reported clicked!", Toast.LENGTH_SHORT).show();
-                                return true;
-                            default:
-                                return false;
+                                        }
+                                    });
+                            return true;
+                        } else if (id == R.id.report) {
+                            Toast.makeText(mContext, "Reported clicked!", Toast.LENGTH_SHORT).show();
+                            return true;
+                        } else {
+                            return false;
                         }
                     }
                 });

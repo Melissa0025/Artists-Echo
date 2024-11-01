@@ -15,29 +15,21 @@
         android:src="@drawable/logo"/>
 
     <Button
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         android:text="Log in"
         android:id="@+id/login"
-        android:layout_marginTop="15dp"
-        android:textColor="@color/my_button_text"
-        android:backgroundTint="@color/my_button_background"
-        />
-<!--    android:background="@drawable/button_background"-->
-
-
+        android:textColor="@color/colorAccent"
+        android:background="@drawable/button_background"/>
 
     <Button
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         android:text="Register"
         android:id="@+id/register"
-        android:layout_marginTop="15dp"
-        android:textColor="@color/my_button_text"
-        android:backgroundTint="@color/my_button_background"/>
-<!--    android:background="@drawable/button_background"-->
-
-
-
+        android:textColor="@color/colorAccent"
+        android:background="@drawable/button_background"/>
 
 </LinearLayout>
