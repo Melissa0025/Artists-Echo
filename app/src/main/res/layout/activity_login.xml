@@ -35,14 +35,13 @@
         android:padding="10dp"/>
 
     <Button
-        android:layout_width="200dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Login"
-        android:id="@+id/login"
         android:layout_marginTop="15dp"
-        android:textColor="@color/colorPrimary"
+        android:text="Log in"
+        android:id="@+id/login"
+        android:textColor="@color/colorAccent"
         android:background="@drawable/button_background"/>
-
 
     <TextView
         android:layout_width="wrap_content"
