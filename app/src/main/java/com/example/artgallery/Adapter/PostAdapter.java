@@ -21,6 +21,9 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.artgallery.CommentsActivity;
+import com.example.artgallery.FollowersActivity;
+import com.example.artgallery.Fragment.PostDetailFragment;
 import com.example.artgallery.Fragment.ProfileFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -145,89 +148,89 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ImageViewHolde
             }
         });
 //
-//        holder.comment.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(mContext, CommentsActivity.class);
-//                intent.putExtra("postid", post.getPostid());
-//                intent.putExtra("publisherid", post.getPublisher());
-//                mContext.startActivity(intent);
+        holder.comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, CommentsActivity.class);
+                intent.putExtra("postid", post.getPostid());
+                intent.putExtra("publisherid", post.getPublisher());
+                mContext.startActivity(intent);
             }
-//        });
+        });
 
-//        holder.comments.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(mContext, CommentsActivity.class);
-//                intent.putExtra("postid", post.getPostid());
-//                intent.putExtra("publisherid", post.getPublisher());
-//                mContext.startActivity(intent);
-//            }
-//        });
-//
-//        holder.post_image.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                SharedPreferences.Editor editor = mContext.getSharedPreferences("PREFS", MODE_PRIVATE).edit();
-//                editor.putString("postid", post.getPostid());
-//                editor.apply();
-//
-//                ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-//                        new PostDetailFragment()).commit();
-//            }
-//        });
-//
-//        holder.likes.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(mContext, FollowersActivity.class);
-//                intent.putExtra("id", post.getPostid());
-//                intent.putExtra("title", "likes");
-//                mContext.startActivity(intent);
-//            }
-//        });
-//
-//        holder.more.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                PopupMenu popupMenu = new PopupMenu(mContext, view);
-//                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-//                    @Override
-//                    public boolean onMenuItemClick(MenuItem menuItem) {
-//                        switch (menuItem.getItemId()){
-//                            case R.id.edit:
-//                                editPost(post.getPostid());
-//                                return true;
-//                            case R.id.delete:
-//                                final String id = post.getPostid();
-//                                FirebaseDatabase.getInstance().getReference("Posts")
-//                                        .child(post.getPostid()).removeValue()
-//                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                            @Override
-//                                            public void onComplete(@NonNull Task<Void> task) {
-//                                                if (task.isSuccessful()){
-//                                                    deleteNotifications(id, firebaseUser.getUid());
-//                                                }
-//                                            }
-//                                        });
-//                                return true;
-//                            case R.id.report:
-//                                Toast.makeText(mContext, "Reported clicked!", Toast.LENGTH_SHORT).show();
-//                                return true;
-//                            default:
-//                                return false;
-//                        }
-//                    }
-//                });
-//                popupMenu.inflate(R.menu.post_menu);
-//                if (!post.getPublisher().equals(firebaseUser.getUid())){
-//                    popupMenu.getMenu().findItem(R.id.edit).setVisible(false);
-//                    popupMenu.getMenu().findItem(R.id.delete).setVisible(false);
-//                }
-//                popupMenu.show();
-//            }
-//        });
-//    }
+        holder.comments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, CommentsActivity.class);
+                intent.putExtra("postid", post.getPostid());
+                intent.putExtra("publisherid", post.getPublisher());
+                mContext.startActivity(intent);
+            }
+        });
+
+        holder.post_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences.Editor editor = mContext.getSharedPreferences("PREFS", MODE_PRIVATE).edit();
+                editor.putString("postid", post.getPostid());
+                editor.apply();
+
+                ((FragmentActivity)mContext).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new PostDetailFragment()).commit();
+            }
+        });
+
+        holder.likes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, FollowersActivity.class);
+                intent.putExtra("id", post.getPostid());
+                intent.putExtra("title", "likes");
+                mContext.startActivity(intent);
+            }
+        });
+
+        holder.more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopupMenu popupMenu = new PopupMenu(mContext, view);
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        switch (menuItem.getItemId()){
+                            case R.id.edit:
+                                editPost(post.getPostid());
+                                return true;
+                            case R.id.delete:
+                                final String id = post.getPostid();
+                                FirebaseDatabase.getInstance().getReference("Posts")
+                                        .child(post.getPostid()).removeValue()
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()){
+                                                   deleteNotifications(id, firebaseUser.getUid());
+                                                }
+                                            }
+                                        });
+                                return true;
+                            case R.id.report:
+                                Toast.makeText(mContext, "Reported clicked!", Toast.LENGTH_SHORT).show();
+                                return true;
+                            default:
+                                return false;
+                        }
+                    }
+                });
+                popupMenu.inflate(R.menu.post_menu);
+                if (!post.getPublisher().equals(firebaseUser.getUid())){
+                    popupMenu.getMenu().findItem(R.id.edit).setVisible(false);
+                   popupMenu.getMenu().findItem(R.id.delete).setVisible(false);
+                }
+                popupMenu.show();
+            }
+        });
+    }
 
     @Override
     public int getItemCount() {
