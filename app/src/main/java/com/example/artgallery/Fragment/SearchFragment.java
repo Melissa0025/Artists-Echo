@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.artgallery.Adapter.UserAdapter;
 import com.example.artgallery.Model.User;
 import com.example.artgallery.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,7 +32,7 @@ public class SearchFragment extends Fragment {
     private RecyclerView recyclerView;
     private UserAdapter userAdapter;
     private List<User> mUsers;
-    private EditText search_bar;
+    EditText search_bar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,6 +43,7 @@ public class SearchFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         search_bar = view.findViewById(R.id.search_bar);
+
         mUsers = new ArrayList<>();
         userAdapter = new UserAdapter(getContext(), mUsers, true);
         recyclerView.setAdapter(userAdapter);
@@ -63,6 +66,10 @@ public class SearchFragment extends Fragment {
     }
 
     private void searchUsers(String s) {
+        if (s.isEmpty()){
+            readUser();
+            return;
+        }
         Query query = FirebaseDatabase.getInstance().getReference("Users").orderByChild("username")
                 .startAt(s)
                 .endAt(s + "\uf8ff");
@@ -84,6 +91,7 @@ public class SearchFragment extends Fragment {
     }
 
     private void readUser() {
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
