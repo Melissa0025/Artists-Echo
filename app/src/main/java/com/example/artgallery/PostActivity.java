@@ -106,7 +106,6 @@ public class PostActivity extends AppCompatActivity {
                         miUrlOk = downloadUri.toString();
 
                         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Posts");
-
                         String postid = reference.push().getKey();
 
                         HashMap<String, Object> hashMap = new HashMap<>();
@@ -115,28 +114,36 @@ public class PostActivity extends AppCompatActivity {
                         hashMap.put("description", description.getText().toString());
                         hashMap.put("publisher", FirebaseAuth.getInstance().getCurrentUser().getUid());
 
-                        reference.child(postid).setValue(hashMap);
-
-                        pd.dismiss();
-
-                        startActivity(new Intent(PostActivity.this, MainActivity.class));
-                        finish();
-
+                        reference.child(postid).setValue(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                pd.dismiss();
+                                if (task.isSuccessful()) {
+                                    startActivity(new Intent(PostActivity.this, MainActivity.class));
+                                    finish();
+                                } else {
+                                    Toast.makeText(PostActivity.this, "Failed to save post", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
                     } else {
-                        Toast.makeText(PostActivity.this, "Failed", Toast.LENGTH_SHORT).show();
+                        pd.dismiss();
+                        Toast.makeText(PostActivity.this, "Upload failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(PostActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    pd.dismiss();
+                    Toast.makeText(PostActivity.this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
-
         } else {
+            pd.dismiss();
             Toast.makeText(PostActivity.this, "No image selected", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

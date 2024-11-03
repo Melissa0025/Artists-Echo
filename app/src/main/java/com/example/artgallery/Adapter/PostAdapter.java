@@ -84,7 +84,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ImageViewHolde
         isLiked(post.getPostid(), holder.like);
         isSaved(post.getPostid(), holder.save);
         nrLikes(holder.likes, post.getPostid());
-        getCommetns(post.getPostid(), holder.comments);
+        getComments(post.getPostid(), holder.comments);
 
         holder.like.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -314,7 +314,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ImageViewHolde
 
     }
 
-    private void getCommetns(String postId, final TextView comments){
+    private void getComments(String postId, final TextView comments){
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Comments").child(postId);
         reference.addValueEventListener(new ValueEventListener() {
             @Override
