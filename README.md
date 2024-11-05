@@ -1,0 +1,3 @@
+Artist's Echo - Let your art be heard
+
+Artist’s Echo is an innovative platform designed to spotlight artists and celebrate their creativity. Our app offers a space where artists can share their artwork and gain recognition for their talent. Users can post, like, and comment on artwork, explore diverse styles and perspectives, and engage in meaningful interactions with other artists. With features like personalized profiles, search options, and a familiar, intuitive layout, Artist’s Echo creates an inclusive community dedicated to the appreciation and discovery of art in all its forms. Whether you're an emerging artist or an art enthusiast, Artist’s Echo is your place to find and share inspiration.
